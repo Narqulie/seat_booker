@@ -15,13 +15,14 @@ Booking details and other information are logged to a file named `booker.log` lo
 
 ## Usage
 
-1. Set the cookie value in the `cookie` variable.
-2. Set your desired floor ID in the `my_floor` variable and spot ID in the `my_seat` variable.
-3. Run the script:
+1. Create config.json from the example
+   1.1 Set the cookie value in the `cookie` variable.
+   1.2 Set your desired floor ID in the `my_floor` variable and spot ID in the `my_seat` variable.
+2. Run the script:
    ```
    python <script_name>.py
    ```
-4. Check the `booker.log` file for logging information about the booking process.
+3. Check the `booker.log` file for logging information about the booking process.
 
 ## Functionality
 
