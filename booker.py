@@ -20,7 +20,7 @@ end_of_today = datetime.today().strftime("%Y-%m-%dT16:30:00%z")
 logging.info(f"End of today: {end_of_today}")
 
 # Read config.json for cookie, floor and seat:
-with open("config.json", "r") as config_file:
+with open(home_dir+"\\config.json", "r") as config_file:
     config = json.load(config_file)
     my_floor = config["floor"]
     my_seat = config["seat"]
@@ -49,7 +49,6 @@ def reserve_spot(cookie, floor, spot):
         logging.info("Seat succesfully booked")
     if response.status_code == 401:
         logging.error("Unauthorized, check your cookies")
-
     else:
         logging.error("Failed to book seat, status code:"
                       f"{response.status_code}, response: {response.text}")
