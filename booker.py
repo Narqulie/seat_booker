@@ -19,12 +19,26 @@ logging.info(f"Today: {today}")
 end_of_today = datetime.today().strftime("%Y-%m-%dT16:30:00%z")
 logging.info(f"End of today: {end_of_today}")
 
-# Read config.json for cookie, floor and seat:
-with open(home_dir+"\\config.json", "r") as config_file:
-    config = json.load(config_file)
-    my_floor = config["floor"]
-    my_seat = config["seat"]
-    cookie = config["cookie"]
+
+# Class to store configuration:
+class Configuration:
+    def __init__(self, floor, seat, cookie):
+        self.floor = floor
+        self.seat = seat
+        self.cookie = cookie
+
+
+# Read config.json and return the values:
+def load_config():
+    try:
+        with open(os.path.join(home_dir, "config.json"), "r") as config_file:
+            data = json.load(config_file)
+            logging.info("Config file read successfully")
+            logging.info(f"Floor: {data['floor']}, Seat: {data['seat']}")
+            return Configuration(data["floor"], data["seat"], data["cookie"])
+    except Exception as e:
+        logging.error(f"Failed to read config.json: {e}")
+        return None
 
 
 # Function to reserve a spot:
@@ -42,7 +56,12 @@ def reserve_spot(cookie, floor, spot):
     }
 
     logging.info(f"Sending request: {data}")
-    response = requests.post(url, headers=headers, json=data)
+    try:
+        response = requests.post(url, headers=headers, json=data)
+    except Exception as e:
+        logging.error(f"Failed to send request: {e}")
+        return
+
     logging.info(f"Response: {response.status_code}")
 
     if response.status_code == 200:
@@ -56,4 +75,8 @@ def reserve_spot(cookie, floor, spot):
 
 # Run the script:
 if __name__ == "__main__":
-    reserve_spot(cookie, my_floor, my_seat)
+    config = load_config()
+    if config:
+        reserve_spot(config.cookie, config.floor, config.seat)
+    else:
+        logging.error("Configuration missing. Exiting.")
