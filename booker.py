@@ -47,7 +47,7 @@ def reserve_spot(cookie, floor, spot):
 
     if response.status_code == 200:
         logging.info("Seat succesfully booked")
-    if response.status_code == 401:
+    elif response.status_code == 401:
         logging.error("Unauthorized, check your cookies")
     else:
         logging.error("Failed to book seat, status code:"
