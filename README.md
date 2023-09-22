@@ -21,7 +21,7 @@ Booking details and other information are logged to a file named `booker.log` lo
 
 2. Run the script:
    ```
-   python <script_name>.py
+   python <booker>.py
    ```
 3. Check the `booker.log` file for logging information about the booking process.
 
