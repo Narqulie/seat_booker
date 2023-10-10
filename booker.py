@@ -7,17 +7,33 @@ import tkinter as tk
 from tkinter import messagebox
 
 home_dir = os.path.dirname(os.path.abspath(__file__))
-logfile_path = os.path.join(home_dir, "booker.log")
 
-# Logging setup:
-logging.basicConfig(filename=logfile_path,
-                    level=logging.INFO,
-                    format='%(asctime)s %(levelname)s %(message)s')
+# Logging: #
+log_to_terminal = True
+# Define the logging format
+log_format = '%(asctime)s %(levelname)s %(message)s'
+
+# File handler
+logfile_path = os.path.join(home_dir, "booker.log")
+file_handler = logging.FileHandler(logfile_path)
+file_handler.setLevel(logging.INFO)
+file_handler.setFormatter(logging.Formatter(log_format))
+
+# Add the file handler
+root_logger = logging.getLogger()
+root_logger.setLevel(logging.INFO)
+root_logger.addHandler(file_handler)
+
+# Stream handler (if log_to_terminal is True)
+if log_to_terminal:
+    stream_handler = logging.StreamHandler()
+    stream_handler.setFormatter(logging.Formatter(log_format))
+    root_logger.addHandler(stream_handler)
+
 
 # Variable setup:
 today = datetime.today().strftime("%Y-%m-%dT07:45:00%z")
 logging.info(f"Today: {today}")
-
 end_of_today = datetime.today().strftime("%Y-%m-%dT16:30:00%z")
 logging.info(f"End of today: {end_of_today}")
 
