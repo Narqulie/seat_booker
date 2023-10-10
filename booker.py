@@ -3,6 +3,8 @@ from datetime import datetime
 import logging
 import os
 import json
+import tkinter as tk
+from tkinter import messagebox
 
 home_dir = os.path.dirname(os.path.abspath(__file__))
 logfile_path = os.path.join(home_dir, "booker.log")
@@ -41,6 +43,13 @@ def load_config():
         return None
 
 
+def display_error(message):
+    root = tk.Tk()
+    root.withdraw()  # Hide the main window
+    messagebox.showerror("Error", message)
+    root.destroy()
+
+
 # Function to reserve a spot:
 def reserve_spot(cookie, floor, spot):
     url = "https://worksense.optimaze.net/api/v1/workstationreservations"
@@ -66,11 +75,16 @@ def reserve_spot(cookie, floor, spot):
 
     if response.status_code == 200:
         logging.info("Seat succesfully booked")
+        display_error("Seat succesfully booked")
     elif response.status_code == 401:
         logging.error("Unauthorized, check your cookies")
+        display_error(f"Booking failed, status code:{response.status_code}"
+                      f"\n response: {response.text}")
     else:
         logging.error("Failed to book seat, status code:"
                       f"{response.status_code}, response: {response.text}")
+        display_error(f"Booking failed, status code:{response.status_code}\n"
+                      f"response: {response.text}")
 
 
 # Run the script:
