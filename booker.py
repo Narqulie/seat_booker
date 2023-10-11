@@ -59,11 +59,15 @@ def load_config():
         return None
 
 
-def display_error(message):
+def display_message(message, state):
     root = tk.Tk()
     root.withdraw()  # Hide the main window
-    messagebox.showerror("Error", message)
-    root.destroy()
+    if state == "Error":
+        messagebox.showerror("Error", message)
+        root.destroy()
+    elif state == "Success":
+        messagebox.showinfo("Success", message)
+        root.destroy()
 
 
 # Function to reserve a spot:
@@ -91,16 +95,16 @@ def reserve_spot(cookie, floor, spot):
 
     if response.status_code == 200:
         logging.info("Seat succesfully booked")
-        display_error("Seat succesfully booked")
+        display_message("Seat succesfully booked", "Success")
     elif response.status_code == 401:
         logging.error("Unauthorized, check your cookies")
-        display_error(f"Booking failed, status code:{response.status_code}"
-                      f"\n response: {response.text}")
+        display_message(f"Booking failed, status code:{response.status_code}"
+                      f"\n response: {response.text}", "Error")
     else:
         logging.error("Failed to book seat, status code:"
                       f"{response.status_code}, response: {response.text}")
-        display_error(f"Booking failed, status code:{response.status_code}\n"
-                      f"response: {response.text}")
+        display_message(f"Booking failed, status code:{response.status_code}\n"
+                      f"response: {response.text}", "Error")
 
 
 # Run the script:
